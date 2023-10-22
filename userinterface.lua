@@ -166,9 +166,11 @@ sui.show = function ()
   newLayout()
   newRow()
   -- 开源信息
-  addTextView('免费开源，有问题(看下方使用说明 or 加群)\n'..
-              'QQ群:206490280      '..
-              'QQ频道号:24oyp5x92q')
+  -- addTextView('免费开源，有问题(看下方使用说明 or 加群)\n'..
+  --             'QQ群:206490280      '..
+  --             'QQ频道号:24oyp5x92q')
+  --
+  -- 使用但是不点star是白嫖行为
   newRow()
   -- 服务器
   addTextView('服务器: ')

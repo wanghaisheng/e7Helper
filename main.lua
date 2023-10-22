@@ -6,13 +6,14 @@ time = systemTime
 update_source_arr = {
   'https://gitea.com/boluoii/e7Helper/raw/branch/master/',
   'https://gitcode.net/otato001/e7hepler/-/raw/master/',
+  'https://gitee.com/boluokk/e7_helper/raw/master/' -- gitee
 }
 update_source = table.remove(update_source_arr, math.random(1, #update_source_arr))
 update_source_fallback = table.remove(update_source_arr, math.random(1, #update_source_arr))
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "10.17 22:52"
+release_date = "10.22 10:39"
 release_content = '修复一些问题'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
@@ -97,32 +98,32 @@ if not hotupdate_disabled then
 end
 local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
-if scriptStatus == 0 then
+-- if scriptStatus == 0 then
   consoleInit()
   initLocalState()
   slog('最近更新时间: '..release_date)
   slog('最近更新内容: '..release_content or '暂无')
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
-else
-  setNumberConfig("scriptStatus", 0)
-  -- 加载本地配置
-  current_task = uiConfigUnion(fileNames)
-  local configReTryCount = current_task['重试次数'] or 5
-  -- 多次异常关闭脚本
-  -- 退出游戏还是重启游戏?
-  if exception_count > configReTryCount then 
-    slog('连续'..configReTryCount..'次异常退出') 
-    setNumberConfig("exception_count", 1) 
-    exit() 
-  else
-    setNumberConfig("exception_count", exception_count + 1)
-  end 
-  if is_refresh_book_tag == 1 then
-    path.刷书签(sgetNumberConfig("refresh_book_tag_count", 0))
-  elseif is_refresh_book_tag == 2 then
-    path.升3星狗粮()
-  else
-    path.游戏开始()
-  end
-end
+-- else
+--   setNumberConfig("scriptStatus", 0)
+--   -- 加载本地配置
+--   current_task = uiConfigUnion(fileNames)
+--   local configReTryCount = current_task['重试次数'] or 5
+--   -- 多次异常关闭脚本
+--   -- 退出游戏还是重启游戏?
+--   if exception_count > configReTryCount then 
+--     slog('连续'..configReTryCount..'次异常退出') 
+--     setNumberConfig("exception_count", 1) 
+--     exit() 
+--   else
+--     setNumberConfig("exception_count", exception_count + 1)
+--   end 
+--   if is_refresh_book_tag == 1 then
+--     path.刷书签(sgetNumberConfig("refresh_book_tag_count", 0))
+--   elseif is_refresh_book_tag == 2 then
+--     path.升3星狗粮()
+--   else
+--     path.游戏开始()
+--   end
+-- end

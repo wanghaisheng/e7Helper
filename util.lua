@@ -15,6 +15,20 @@ allClick = function (selector) nodeLib.matchAllAndClick(point[selector]) end
 
 saveConfig = setStringConfig
 
+stop = function ()
+	-- 打印日志
+	exit()
+end
+
+-- 休息时间
+waitTime= function (intervalTime)
+		-- 开始休息
+	if intervalTime ~= 0 then
+		local intervalSecTime = (intervalTime * 60 * 1000) + time()
+		wait(function () log("挂机时间: "..getTime(intervalSecTime)..' (你的star是作者的最大帮助)') end, 1, intervalTime * 60)
+	end
+end
+
 loadConfig = function(k, v)
   v = v or ''
   local y = getStringConfig(k)

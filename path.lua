@@ -5,6 +5,10 @@ path.游戏开始 = function ()
 	path.任务队列()
 end
 
+path.fallback = {
+	
+}
+
 -- isBack: 通过按back来回退
 path.游戏首页 = function ()
 	current_server = getUIRealValue('服务器', '服务器')
@@ -24,11 +28,7 @@ path.游戏首页 = function ()
 			return 1
 		end
 		if not findTapOnce(clickTarget, {keyword = {'结束', '取消'}}) then
-			-- if not isBack then
-				stap(point.回退)
-			-- else
-				-- back()
-			-- end
+			stap(point.回退)
 		end
 	end, 1, 7 * 60) == 'exit' then
 		slog('服务器维护中...')
@@ -38,39 +38,43 @@ end
 
 path.任务队列 = function ()
 	local allTask = table.filter(ui_option.任务, function (v)
-		return not v:includes({'社团签到',
-		'社团奖励',
-		'社团捐赠'})
+		return not v:includes({'社团签到', '社团奖励','社团捐赠'})
 	end)
-	local curTaskIndex = sgetNumberConfig("current_task_index", 0)
+	-- 当前任务下标
+	local curTaskIndex = 1 
+	-- 一个任务可最多尝试几次呢?
+	local navigateFailTimes = 0
 	local intervalTime = current_task['运行间隔时间']
 	repeat
-		for i,v in pairs(allTask) do
-			if i > curTaskIndex and current_task[v] then
-				-- 0 表示异常
-				-- 1 或者 nil 表示 ok
-				-- 2 表示重做
-				if path[v]() == 2 then path.游戏首页() path[v]() end
-				slog(v)
-				setNumberConfig("exception_count", 1)
+		while true do
+			if curTaskIndex <= #allTask and current_task[v] then
 				path.游戏首页()
+				if path[allTask[curTaskIndex]]() == 'f' then 
+					curTaskIndex = curTaskIndex + 1
+					navigateFailTimes = 0
+				end
+				navigateFailTimes = navigateFailTimes + 1
+				if navigateFailTimes == 5 then
+					stop('超出重试次数')
+					-- 记录日志，发送云端消息
+				end
+			else
+				slog('任务完成')
+				break
 			end
-			setNumberConfig('current_task_index', i)
 		end
-		-- 开始休息
-		if intervalTime ~= 0 then
-			local intervalSecTime = (intervalTime * 60 * 1000) + time()
-			wait(function () log("挂机时间: "..getTime(intervalSecTime)..' (你的star是作者的最大帮助)') end, 1, intervalTime * 60)
-		end
-		setNumberConfig('current_task_index', 0)
+		-- 休息时间
+		waitTime(intervalTime)
+		curTaskIndex = 1
+		navigateFailTimes = 0
 	until intervalTime == 0
 end
 
 path.社团任务 = function ()
 	wait(function ()
 		stap(point.社团)
-				ssleep(1)
-			if not findOne('国服主页Rank') then return 1 end
+		ssleep(1)
+		if not findOne('国服主页Rank') then return 1 end
 	end)
 	longAppearAndTap('国服左上骑士团', nil, {447,47}, 2)
 	if current_task.社团签到 then path.社团签到() end
