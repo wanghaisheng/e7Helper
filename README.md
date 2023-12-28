@@ -21,15 +21,27 @@
 ### 开发
 1、下载懒人精灵IDE(3.8.6.2)
 
-2、编码调试
+2、安装python
+   下载按键精灵
+3、获取代码
+
+git clone  https://github.com/wanghaisheng/e7Helper
+
+4、编码调试
 ```python
-1、将整个项目 clone 下来
-2、填写 start.py 中的 projectPath 和 packagePath
-3、运行 copy() 函数
-4、开始编码调试
+python start.py -s 1
+
+option 1：复制代码到按键精灵目录
+
+填写 start.py 中的 projectPath 和 packagePath
+
+option 2:更新源代码
+
+option 3:提交源代码
+
 ```
 
-3、发布
+5、发布
 ```python
 1、在懒人IDE中打包脚本文件
 2、运行 start.py 中的 saveAndPush()函数
